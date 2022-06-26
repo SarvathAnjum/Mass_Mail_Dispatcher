@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">                                                     
+	<title>Mass Mailer</title>
+	<link rel="stylesheet" href="style1.css">
+</head>
+<body>
+	
+	
+	<div class="container">
+		<div class="header">
+			<div class="navbar">
+				<a href="file:///C:/xampp/htdocs/Mass_Mail_Dispatcher/home.html">HOME</a>
+				<a href="file:///C:/xampp/htdocs/Mass_Mail_Dispatcher/contact.html#about">CONTACT US</a>
+			</div>
+		<form onsubmit="sendEmail(); reset(); return false;">
+			
+			<h1 style="text-align: center;color:#000080;font-size:50px">Mass Mail Dispatcher </h1>
+			<h2 style="text-align: center;color:darkblue; ">Sender's Credentials</h2>
+			<input type="email" id="email" placeholder="Email id" required>
+			<input type="password" id="pwd" placeholder="password" required>
+			<h2 style="text-align: center;color:darkblue;">Receiver's Credentials</h2>
+			<input type="email" id="email" placeholder="Email id" required>
+			<h5 style="text-align: center;color:darkblue;">OR UPLOAD A CSV FILE</h5>
+			<script type="text/javascript">
+				function Upload() {
+					var fileUpload = document.getElementById("fileUpload");
+        			var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+        			if (regex.test(fileUpload.value.toLowerCase())) {
+            			if (typeof (FileReader) != "undefined") {
+                		var reader = new FileReader();
+                		reader.onload = function (e) {
+                    		var table = document.createElement("table");
+                    		var rows = e.target.result.split("\n");
+                    		for (var i = 0; i < rows.length; i++) {
+                        		var cells = rows[i].split(",");
+                        		if (cells.length > 1) {
+                            		var row = table.insertRow(-1);
+                            			for (var j = 0; j < cells.length; j++) {
+                                			var cell = row.insertCell(-1);
+                                			cell.innerHTML = cells[j];
+                            			}
+                        			}
+                    			}
+                    			var dvCSV = document.getElementById("dvCSV");
+                    			dvCSV.innerHTML = "";
+                    			dvCSV.appendChild(table);
+                			}
+                			reader.readAsText(fileUpload.files[0]);
+            				} else {
+                				alert("This browser does not support HTML5.");
+            				}
+        				} else {
+            				alert("Please upload a valid CSV file.");
+        				}
+    				}
+				</script>
+				<input type="file" id="fileUpload" />
+				<input type="button" id="upload" value="Upload" onclick="Upload()" />
+				<hr />
+				<div id="dvCSV">
+			</div>
+			<textarea id="message" rows="3" placeholder="Enter your message"></textarea>
+			<button type="submit">Send</button>
+		</form>
+	</div>
+
+	<script src="https://smtpjs.com/v3/smtp.js"></script>
+	<script>
+		function sendEmail(){
+			Email.send({
+    		Host : "smtp.gmail.com",
+    		Username : "sarvathanjum04@gmail.com",
+    		Password : "Pink@0412",
+   	 		To : 'sarvath0412@gmail.com',
+    		From : document.getElementById("email").value,
+    		Subject : "Mass Mail Dispatcher",
+    		Body : "And this is the body"
+		}).then(
+  		message => alert(message)
+		);
+	}
+	</script>
+
+
+</body>
+</html>
